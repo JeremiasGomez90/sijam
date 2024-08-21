@@ -24,3 +24,63 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Empleado {
+  id Int @id @default(autoincrement())
+  nombre String
+  apellido String
+  numero String
+  cuit String?
+  telefono String?
+  plantaId Int
+  planta Planta @relation(fields: [plantaId], references: [id])
+  horas Hora[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Planta {
+  id Int @id @default(autoincrement())
+  nombre String
+  locacion String
+  empleados Empleado[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Hora {
+  id Int @id @default(autoincrement())
+  cantidad Float
+  fecha DateTime
+  empleadoId Int
+  empleado Empleado @relation(fields: [empleadoId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Novedad {
+  id            Int                   @id @default(autoincrement())
+  codigo String
+  nombre String
+  descripcion   String
+  referencias   NovedadesReferencias[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Referencia {
+  id            Int                   @id @default(autoincrement())
+  nombre        String                @unique
+  descripcion   String
+  novedades     NovedadesReferencias[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model NovedadesReferencias {
+  id            Int                   @id @default(autoincrement())
+  novedadId     Int
+  referenciaId  Int
+  novedad       Novedad    @relation(fields: [novedadId], references: [id], onDelete: Cascade)
+  referencia    Referencia @relation(fields: [referenciaId], references: [id], onDelete: Cascade)
+}

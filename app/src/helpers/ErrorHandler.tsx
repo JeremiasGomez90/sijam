@@ -3,9 +3,7 @@ import { toast } from "react-toastify";
 
 export const handleError = (error: any) => {
   if (axios.isAxiosError(error)) {
-    console.log("entro aca")
     var err = error.response;
-    console.log(err)
     if (Array.isArray(err?.data.errors)) {
       for (let val of err?.data.errors) {
         toast.warning(val.description);
@@ -22,7 +20,5 @@ export const handleError = (error: any) => {
     } else if (err?.status == 400) {
       toast.error("Error de servidor");
     }
-
-    console.log("salio aca")
   }
 };

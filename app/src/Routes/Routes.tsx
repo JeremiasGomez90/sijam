@@ -8,6 +8,7 @@ import ProtectedRoute from "@/Routes/ProtectedRoute";
 import Plantas from "@/pages/Plantas";
 import Empleados from "@/pages/Empleados";
 import NewEmpleado from "@/pages/NewEmpleado";
+import NotFound from "@/pages/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -71,6 +72,10 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-    ]
+    ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   }
 ]);

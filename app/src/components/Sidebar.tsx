@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom"
-import { HomeIcon, Users2, User, Factory, LogOut } from "lucide-react"
+import { HomeIcon, Users2, User, Factory, LogOut, Group, Newspaper, ArchiveRestore, Blinds } from "lucide-react"
 import { useAuth } from "@/contexts/useAuth";
 
 function SettingsIcon() {
@@ -29,14 +29,34 @@ const links = [
     icon: <HomeIcon className="h-4 w-4" />,
   },
   {
+    label: "Empleados",
+    path: "/empleados",
+    icon: <Users2 className="h-4 w-4" />,
+  },
+  {
     label: "Plantas",
     path: "/plantas",
     icon: <Factory className="h-4 w-4" />,
   },
   {
-    label: "Empleados",
-    path: "/empleados",
-    icon: <Users2 className="h-4 w-4" />,
+    label: "Grupos",
+    path: "/grupos",
+    icon: <Group className="h-4 w-4" />,
+  },
+  {
+    label: "Novedades",
+    path: "/novedades",
+    icon: <Newspaper className="h-4 w-4" />,
+  },
+  {
+    label: "Referencias",
+    path: "/referencias",
+    icon: <Blinds className="h-4 w-4" />,
+  },
+  {
+    label: "Fichadas",
+    path: "/fichadas",
+    icon: <ArchiveRestore className="h-4 w-4" />,
   },
   {
     label: "Perfil",
@@ -55,7 +75,6 @@ export default function Sidebar() {
   const { pathname } = useLocation();
   const { logout, user } = useAuth();
 
-  console.log({ user });
   return (
     <aside className="flex w-64 flex-col border-r bg-background">
       <nav className="flex flex-1 flex-col overflow-y-auto px-4 py-6">

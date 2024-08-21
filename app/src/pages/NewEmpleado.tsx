@@ -22,7 +22,7 @@ export default function NewEmpleado() {
   const form = useForm({
     resolver: zodResolver(
       z.object({
-        numero: z.string().min(1).max(50),
+        numero: z.string().min(1, { message: "aca podes poner algun mensaje de error" }).max(50),
         nombre: z.string().min(1).max(50),
         apellido: z.string().min(1).max(50),
         telefono: z.string().min(1).max(50),
@@ -63,7 +63,7 @@ export default function NewEmpleado() {
                 <FormItem>
                   <FormLabel>Numero Empleado</FormLabel>
                   <FormControl>
-                    <Input placeholder="Numero empleado" {...field} onChange={field.onChange} />
+                    <Input placeholder="Numero empleado" {...field} />
                   </FormControl>
                 </FormItem>
               )}
