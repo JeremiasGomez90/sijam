@@ -16,33 +16,46 @@ import {
 } from "@/components/ui/tooltip"
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getEmpleados } from "@/services/empleadoService";
+import { Empleado } from "@/models/empleado";
  
-const data = [
-  {
-    numero: "EMP001",
-    nombre: "Jeremias",
-    apellido: "Gomez",
-    nro_documento: "33333333",
-    planta: "Ternium Canning",
-  },
-  {
-    numero: "EMP002",
-    nombre: "Juan Pablo",
-    apellido: "Mantelli",
-    nro_documento: "33333333",
-    planta: "Ternium Canning",
-  },
-  {
-    numero: "EMP003",
-    nombre: "Jeremias",
-    apellido: "Gomez",
-    nro_documento: "33333333",
-    planta: "Ternium Canning",
-  },
-]
+// const data = [
+//   {
+//     numero: "EMP001",
+//     nombre: "Jeremias",
+//     apellido: "Gomez",
+//     nro_documento: "33333333",
+//     planta: "Ternium Canning",
+//   },
+//   {
+//     numero: "EMP002",
+//     nombre: "Juan Pablo",
+//     apellido: "Mantelli",
+//     nro_documento: "33333333",
+//     planta: "Ternium Canning",
+//   },
+//   {
+//     numero: "EMP003",
+//     nombre: "Jeremias",
+//     apellido: "Gomez",
+//     nro_documento: "33333333",
+//     planta: "Ternium Canning",
+//   },
+// ]
 
 export default function Empleados() {
   const navigate = useNavigate();
+  const [data, setData] = useState<Empleado[]>([]);
+
+  useEffect(() => {
+    getEmpleados()
+      .then((res) => {
+        setData(res?.data || [])
+      })
+      .catch(err => console.log(err))
+  }, [])
+
   return (  
     <div className="h-full p-4">
       <div className="w-full flex justify-between items-center border-b mb-3 pb-3">
@@ -70,8 +83,8 @@ export default function Empleados() {
             <TableHead>Numero</TableHead>
             <TableHead>Nombre</TableHead>
             <TableHead>Apellido</TableHead>
-            <TableHead>DNI</TableHead>
-            <TableHead>Planta</TableHead>
+            <TableHead>CUIT</TableHead>
+            {/* <TableHead>Planta</TableHead> */}
             <TableHead className="text-right pr-[40px]">Acciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -81,8 +94,7 @@ export default function Empleados() {
               <TableCell className="font-medium py-2">{emp.numero}</TableCell>
               <TableCell className="py-2">{emp.nombre}</TableCell>
               <TableCell className="py-2">{emp.apellido}</TableCell>
-              <TableCell className="py-2">{emp.nro_documento}</TableCell>
-              <TableCell className="py-2">{emp.planta}</TableCell>
+              <TableCell className="py-2">{emp.cuit}</TableCell>
               <TableCell className="flex gap-2 py-2 justify-end">
                 <TooltipProvider delayDuration={0}>
                   <Tooltip disableHoverableContent>

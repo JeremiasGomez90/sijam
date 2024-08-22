@@ -1,21 +1,23 @@
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 // Components
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { createEmpleado } from "@/services/empleadoService";
 
+type Inputs = {
+  numero: string;
+  cuit: string;
+  nombre: string;
+  apellido: string;
+  telefono: string;
+  direccion: string;
+}
 
 export default function NewEmpleado() {
   const navigate = useNavigate();
@@ -23,27 +25,29 @@ export default function NewEmpleado() {
     resolver: zodResolver(
       z.object({
         numero: z.string().min(1, { message: "aca podes poner algun mensaje de error" }).max(50),
+        cuit: z.string().min(1).max(11),
         nombre: z.string().min(1).max(50),
         apellido: z.string().min(1).max(50),
         telefono: z.string().min(1).max(50),
         direccion: z.string().min(1).max(50),
-        planta: z.string().min(1).max(50),
+        // planta: z.string().min(1).max(50),
       }),
     ),
     defaultValues: {
       numero: '',
+      cuit: '',
       nombre: '',
       apellido: '',
       telefono: '',
       direccion: '',
-      planta: '',
     }
   });
 
-  const onSubmit = async (data: any) => {
-    console.log({ data });
+  const onSubmit: SubmitHandler<Inputs>  = async (data) => {
+    const res = await createEmpleado(data);
+    console.log(res);
   }
-
+  
   return (
     <div className="h-full p-4">
       <div className="flex items-center gap-4 border-b mb-3 pb-3">
@@ -64,6 +68,20 @@ export default function NewEmpleado() {
                   <FormLabel>Numero Empleado</FormLabel>
                   <FormControl>
                     <Input placeholder="Numero empleado" {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <FormField
+              control={form.control}
+              name="cuit"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>C.U.I.T</FormLabel>
+                  <FormControl>
+                    <Input placeholder="C.U.I.T" {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -125,7 +143,7 @@ export default function NewEmpleado() {
               )}
             />
           </div>
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <FormField
               control={form.control}
               name="planta"
@@ -147,7 +165,7 @@ export default function NewEmpleado() {
                 </FormItem>
               )}
             />
-          </div>
+          </div> */}
           <Button variant="default" className="w-full" type="submit" disabled={Object.entries(form.formState.errors).length > 0}>
             <span className="text-sm font-semibold">Guardar</span>
           </Button>
@@ -155,4 +173,4 @@ export default function NewEmpleado() {
       </Form>
     </div>
   );
-};
+}

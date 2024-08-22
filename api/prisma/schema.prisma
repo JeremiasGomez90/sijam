@@ -32,8 +32,9 @@ model Empleado {
   numero String
   cuit String?
   telefono String?
-  plantaId Int
-  planta Planta @relation(fields: [plantaId], references: [id])
+  direccion String?
+  plantaId Int?
+  planta Planta? @relation(fields: [plantaId], references: [id])
   horas Hora[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

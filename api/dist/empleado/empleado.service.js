@@ -9,32 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrismaService = void 0;
+exports.EmpleadoService = void 0;
 const common_1 = require("@nestjs/common");
-const client_1 = require("@prisma/client");
-const dotenv = require("dotenv");
-dotenv.config();
-let PrismaService = class PrismaService extends client_1.PrismaClient {
-    constructor() {
-        super({
-            datasources: {
-                db: {
-                    url: process.env.DATABASE_URL ||
-                        'mysql://jeremiasgomez:clemente90@localhost:3306/sijamdb?schema=public',
-                },
-            },
+const prisma_service_1 = require("../prisma/prisma.service");
+let EmpleadoService = class EmpleadoService {
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
+    async create(dto) {
+        console.log({ dto });
+        const empleado = await this.prisma.empleado.create({
+            data: dto,
         });
+        return empleado;
     }
-    async onModuleInit() {
-        await this.$connect();
-    }
-    async onModuleDestroy() {
-        await this.$disconnect();
+    async findAll() {
+        const empleados = await this.prisma.empleado.findMany();
+        return empleados;
     }
 };
-exports.PrismaService = PrismaService;
-exports.PrismaService = PrismaService = __decorate([
+exports.EmpleadoService = EmpleadoService;
+exports.EmpleadoService = EmpleadoService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [])
-], PrismaService);
-//# sourceMappingURL=prisma.service.js.map
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+], EmpleadoService);
+//# sourceMappingURL=empleado.service.js.map
