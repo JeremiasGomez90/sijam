@@ -2,7 +2,7 @@ import axios from "axios";
 import { handleError } from "../helpers/ErrorHandler";
 import { Referencia } from "@/models/referencia";
 
-const api = "http://localhost:8000/Referencia";
+const api = "http://localhost:8000/referencia";
 
 export const createReferencia = async (data: Referencia) => {
   try {

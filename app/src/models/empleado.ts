@@ -1,5 +1,5 @@
 export type Empleado = {
-  id: number;
+  id?: number;
   numero: string;
   nombre: string;
   cuit: string;

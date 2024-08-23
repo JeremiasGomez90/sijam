@@ -9,48 +9,53 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-
-const data = [
-  {
-    id: 1,
-    nombre: "Ternium Canning",
-  },
-  {
-    id: 2,
-    nombre: "Ternium Haedo",
-  },
-  {
-    id: 3,
-    nombre: "Ternium San Nicolas",
-  },
-  {
-    id: 4,
-    nombre: "Ternium Rosario",
-  },
-  {
-    id: 5,
-    nombre: "Taller",
-  },
-  {
-    id: 6,
-    nombre: "Acindar",
-  }
-]
+} from "@/components/ui/tooltip";
+import { useEffect, useState } from "react";
+import { Planta } from "@/models/planta";
+import { bajaPlanta, getPlantas } from "@/services/plantaService";
+import { confirmAlert } from "@/utils/alerts";
 
 export default function Plantas() {
   const navigate = useNavigate();
+  const [data, setData] = useState<Planta[]>([]);
+
+  useEffect(() => {
+    getPlantas().then((res) => {
+      if (res?.data) setData(res?.data);
+    });
+  }, []);
+
+  const eliminar = async (id: number) => {
+    const alert = await confirmAlert({
+      title: "¿Eliminar Planta?",
+    });
+
+    if (alert.isConfirmed) {
+      bajaPlanta(id).then((res) => {
+        if (res) {
+          getPlantas().then((res) => {
+            if (res?.data) setData(res?.data);
+          });
+        }
+      });
+    }
+  };
+
   return (
     <div className="h-full p-4">
       <div className="w-full flex justify-between items-center border-b mb-3 pb-3">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="bg-green-600 text-white hover:bg-green-600" onClick={() => navigate("/")}>
+          <Button
+            variant="ghost"
+            className="bg-green-600 text-white hover:bg-green-600"
+            onClick={() => navigate("/plantas/crear")}
+          >
             <span>Agregar</span>
             <PlusIcon className="h-5 w-5" />
           </Button>
@@ -67,7 +72,7 @@ export default function Plantas() {
           </div>
         </div>
       </div>
-      <Table >
+      <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Numero</TableHead>
@@ -84,7 +89,11 @@ export default function Plantas() {
                 <TooltipProvider delayDuration={0}>
                   <Tooltip disableHoverableContent>
                     <TooltipTrigger>
-                      <Button variant="outline" size="sm" className="text-blue-600 hover:bg-blue-700 hover:text-white">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-blue-600 hover:bg-blue-700 hover:text-white"
+                      >
                         <Info className="h-5 w-5" />
                       </Button>
                     </TooltipTrigger>
@@ -93,10 +102,15 @@ export default function Plantas() {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-                <TooltipProvider delayDuration={0} >
+                <TooltipProvider delayDuration={0}>
                   <Tooltip disableHoverableContent>
                     <TooltipTrigger>
-                      <Button variant="outline" size="sm" className="text-red-600 hover:bg-red-700 hover:text-white">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-red-600 hover:bg-red-700 hover:text-white"
+                        onClick={() => eliminar(p.id || 0)}
+                      >
                         <Trash className="h-5 w-5" />
                       </Button>
                     </TooltipTrigger>
@@ -111,5 +125,5 @@ export default function Plantas() {
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }

@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom"
-import { HomeIcon, Users2, User, Factory, LogOut, Group, Newspaper, ArchiveRestore, Blinds } from "lucide-react"
+import { HomeIcon, Users2, User, Factory, LogOut, Group, Newspaper, ArchiveRestore, Blinds, FileText } from "lucide-react"
 import { useAuth } from "@/contexts/useAuth";
 
 function SettingsIcon() {
@@ -37,6 +37,11 @@ const links = [
     label: "Plantas",
     path: "/plantas",
     icon: <Factory className="h-4 w-4" />,
+  },
+  {
+    label: "Contratos",
+    path: "/contratos",
+    icon: <FileText className="h-4 w-4" />,
   },
   {
     label: "Grupos",

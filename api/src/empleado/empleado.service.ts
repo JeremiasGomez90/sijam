@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Empleado } from '@prisma/client';
 import { EmpleadoDto } from './dto';
@@ -16,8 +16,28 @@ export class EmpleadoService {
   }
 
   async findAll(): Promise<Empleado[]> {
-    const empleados = await this.prisma.empleado.findMany();
+    const empleados = await this.prisma.empleado.findMany({
+      where: {
+        baja: false,
+      },
+    });
 
     return empleados;
+  }
+
+  async unsubscribe(id: number): Promise<Empleado> {
+    const row = await this.prisma.empleado.findFirst({ where: { id } });
+    if (!row) {
+      throw new NotFoundException();
+    }
+
+    return await this.prisma.empleado.update({
+      where: {
+        id,
+      },
+      data: {
+        baja: true,
+      },
+    });
   }
 }

@@ -33,9 +33,8 @@ model Empleado {
   cuit String?
   telefono String?
   direccion String?
-  plantaId Int?
-  planta Planta? @relation(fields: [plantaId], references: [id])
   horas Hora[]
+  baja Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -43,8 +42,30 @@ model Empleado {
 model Planta {
   id Int @id @default(autoincrement())
   nombre String
-  locacion String
-  empleados Empleado[]
+  locacion String?
+  contratos Contrato[]
+  baja Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Contrato {
+  id            Int                   @id @default(autoincrement())
+  nombre        String                @unique
+  plantaId Int?
+  planta Planta? @relation(fields: [plantaId], references: [id])
+  grupo Grupo[]
+  baja Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Grupo {
+  id            Int                   @id @default(autoincrement())
+  nombre        String                @unique
+  contratoId Int?
+  contrato Contrato? @relation(fields: [contratoId], references: [id])
+  baja Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -55,6 +76,7 @@ model Hora {
   fecha DateTime
   empleadoId Int
   empleado Empleado @relation(fields: [empleadoId], references: [id])
+  baja Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -65,15 +87,18 @@ model Novedad {
   nombre String
   descripcion   String
   referencias   NovedadesReferencias[]
+  baja Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Referencia {
   id            Int                   @id @default(autoincrement())
+  codigo String
   nombre        String                @unique
   descripcion   String
   novedades     NovedadesReferencias[]
+  baja Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

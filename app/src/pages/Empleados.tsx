@@ -17,7 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getEmpleados } from "@/services/empleadoService";
+import { bajaEmpleado, getEmpleados } from "@/services/empleadoService";
+import { confirmAlert } from "@/utils/alerts";
 import { Empleado } from "@/models/empleado";
 
 export default function Empleados() {
@@ -27,16 +28,32 @@ export default function Empleados() {
   useEffect(() => {
     getEmpleados()
       .then((res) => {
-        setData(res?.data || [])
+        if (res?.data) setData(res?.data);
       })
-      .catch(err => console.log(err))
-  }, [])
+  }, []);
+
+  const eliminar = async (id: number) => {
+    const alert = await confirmAlert({
+      title: "¿Eliminar Empleado?",
+    });
+
+    if (alert.isConfirmed) {
+      bajaEmpleado(id)
+        .then((res) => {
+          if (res) {
+            getEmpleados().then((res) => {
+              if (res?.data) setData(res?.data);
+            });
+          }
+        })
+    }
+  };
 
   return (  
     <div className="h-full p-4">
       <div className="w-full flex justify-between items-center border-b mb-3 pb-3">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="bg-green-600 text-white hover:bg-green-600" onClick={() => navigate("/empleados/create")}>
+          <Button variant="ghost" className="bg-green-600 text-white hover:bg-green-600" onClick={() => navigate("/empleados/crear")}>
             <span>Agregar</span>
             <PlusIcon className="h-5 w-5" />
           </Button>
@@ -86,7 +103,7 @@ export default function Empleados() {
                 <TooltipProvider delayDuration={0} >
                   <Tooltip disableHoverableContent>
                     <TooltipTrigger>
-                      <Button variant="outline" size="sm" disabled className="text-red-600 hover:bg-red-700 hover:text-white disabled:cursor-not-allowed">
+                      <Button variant="outline" size="sm" className="text-red-600 hover:bg-red-700 hover:text-white disabled:cursor-not-allowed" onClick={() => eliminar(emp.id || 0)}>
                         <Trash className="h-5 w-5" />
                       </Button>
                     </TooltipTrigger>

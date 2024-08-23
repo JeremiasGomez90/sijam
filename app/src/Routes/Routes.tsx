@@ -9,6 +9,15 @@ import Plantas from "@/pages/Plantas";
 import Empleados from "@/pages/Empleados";
 import NewEmpleado from "@/pages/NewEmpleado";
 import NotFound from "@/pages/NotFound";
+import NewPlanta from "@/pages/NewPlanta";
+import Grupos from "@/pages/Grupos";
+import NewGrupo from "@/pages/NewGrupo";
+import Novedades from "@/pages/Novedades";
+import NewNovedad from "@/pages/NewNovedad";
+import Referencias from "@/pages/Referencias";
+import NewReferencia from "@/pages/NewReferencia";
+import Contratos from "@/pages/Contratos";
+import NewContrato from "@/pages/NewContrato";
 
 export const router = createBrowserRouter([
   {
@@ -33,14 +42,6 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "plantas",
-        element: (
-          <ProtectedRoute>
-            <Plantas />
-          </ProtectedRoute>
-        ),
-      },
-      {
         path: "empleados",
         element: (
           <ProtectedRoute>
@@ -49,10 +50,90 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/empleados/create",
+        path: "/empleados/crear",
         element: (
           <ProtectedRoute>
             <NewEmpleado />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "plantas",
+        element: (
+          <ProtectedRoute>
+            <Plantas />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "plantas/crear",
+        element: (
+          <ProtectedRoute>
+            <NewPlanta />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "contratos",
+        element: (
+          <ProtectedRoute>
+            <Contratos />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "contratos/crear",
+        element: (
+          <ProtectedRoute>
+            <NewContrato />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "grupos",
+        element: (
+          <ProtectedRoute>
+            <Grupos />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "grupos/crear",
+        element: (
+          <ProtectedRoute>
+            <NewGrupo />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "novedades",
+        element: (
+          <ProtectedRoute>
+            <Novedades />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "novedades/crear",
+        element: (
+          <ProtectedRoute>
+            <NewNovedad />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "referencias",
+        element: (
+          <ProtectedRoute>
+            <Referencias />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "referencias/crear",
+        element: (
+          <ProtectedRoute>
+            <NewReferencia />
           </ProtectedRoute>
         ),
       },

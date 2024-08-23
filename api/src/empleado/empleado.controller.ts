@@ -4,7 +4,9 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
+  Put,
 } from '@nestjs/common';
 import { EmpleadoService } from './empleado.service';
 import { EmpleadoDto } from './dto';
@@ -24,5 +26,11 @@ export class EmpleadoController {
   @HttpCode(HttpStatus.OK)
   findAll(): Promise<Empleado[]> {
     return this.empleadoService.findAll();
+  }
+
+  @Put('/unsubscribe/:id')
+  @HttpCode(HttpStatus.OK)
+  unsubscribe(@Param('id') id: number): Promise<Empleado> {
+    return this.empleadoService.unsubscribe(id);
   }
 }
