@@ -19,30 +19,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getEmpleados } from "@/services/empleadoService";
 import { Empleado } from "@/models/empleado";
- 
-// const data = [
-//   {
-//     numero: "EMP001",
-//     nombre: "Jeremias",
-//     apellido: "Gomez",
-//     nro_documento: "33333333",
-//     planta: "Ternium Canning",
-//   },
-//   {
-//     numero: "EMP002",
-//     nombre: "Juan Pablo",
-//     apellido: "Mantelli",
-//     nro_documento: "33333333",
-//     planta: "Ternium Canning",
-//   },
-//   {
-//     numero: "EMP003",
-//     nombre: "Jeremias",
-//     apellido: "Gomez",
-//     nro_documento: "33333333",
-//     planta: "Ternium Canning",
-//   },
-// ]
 
 export default function Empleados() {
   const navigate = useNavigate();
@@ -84,7 +60,6 @@ export default function Empleados() {
             <TableHead>Nombre</TableHead>
             <TableHead>Apellido</TableHead>
             <TableHead>CUIT</TableHead>
-            {/* <TableHead>Planta</TableHead> */}
             <TableHead className="text-right pr-[40px]">Acciones</TableHead>
           </TableRow>
         </TableHeader>

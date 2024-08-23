@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
-import { ToastContainer } from "react-toastify";
+import { Toaster } from "@/components/ui/toaster";
 import { UserProvider } from "./contexts/useAuth";
 
 function App() {
@@ -9,7 +8,7 @@ function App() {
     <>
       <UserProvider>
         <Outlet />
-        <ToastContainer />
+        <Toaster />
       </UserProvider>
     </>
   );

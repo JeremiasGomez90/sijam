@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { UserProfile } from "../models/user";
 import { useNavigate } from "react-router-dom";
 import { loginAPI, logoutAPI } from "../services/authService";
-import { toast } from "react-toastify";
+import { useToast } from "@/components/ui/use-toast"
 import React from "react";
 import axios from "axios";
 
@@ -19,6 +19,7 @@ type Props = { children: React.ReactNode };
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
 export const UserProvider = ({ children }: Props) => {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -46,7 +47,7 @@ export const UserProvider = ({ children }: Props) => {
           navigate("/home");
         }
       })
-      .catch(() => toast.warning("Server error occured"));
+      .catch(() => toast({ description: "Server error occured", variant: 'destructive' }));
   };
 
   const isLoggedIn = () => {
@@ -63,7 +64,7 @@ export const UserProvider = ({ children }: Props) => {
           setToken("");
           navigate("/");
         })
-        .catch(() => toast.warning("Server error occured"));;
+        .catch(() => toast({ description: "Server error occured", variant: 'destructive' }));
     }
   };
 

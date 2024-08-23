@@ -15,7 +15,6 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    // formState: { errors },
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {

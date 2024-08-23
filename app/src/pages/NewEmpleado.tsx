@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useToast } from "@/components/ui/use-toast";
 
 // Components
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ type Inputs = {
 
 export default function NewEmpleado() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(
       z.object({
@@ -30,7 +32,6 @@ export default function NewEmpleado() {
         apellido: z.string().min(1).max(50),
         telefono: z.string().min(1).max(50),
         direccion: z.string().min(1).max(50),
-        // planta: z.string().min(1).max(50),
       }),
     ),
     defaultValues: {
@@ -44,8 +45,13 @@ export default function NewEmpleado() {
   });
 
   const onSubmit: SubmitHandler<Inputs>  = async (data) => {
-    const res = await createEmpleado(data);
-    console.log(res);
+    try {
+      await createEmpleado(data);
+      toast({ description: "Empleado creado correctamente" });
+      navigate("/empleados");
+    } catch (error) {
+      toast({ description: "Hubo un error al crear el empleado", variant: "destructive" });
+    }
   }
   
   return (
@@ -143,29 +149,6 @@ export default function NewEmpleado() {
               )}
             />
           </div>
-          {/* <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="planta"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Planta</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona una planta" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="m@example.com">m@example.com</SelectItem>
-                      <SelectItem value="m@google.com">m@google.com</SelectItem>
-                      <SelectItem value="m@support.com">m@support.com</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-          </div> */}
           <Button variant="default" className="w-full" type="submit" disabled={Object.entries(form.formState.errors).length > 0}>
             <span className="text-sm font-semibold">Guardar</span>
           </Button>
