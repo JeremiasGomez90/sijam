@@ -14,13 +14,17 @@ const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 const dotenv = require("dotenv");
 dotenv.config();
+const user = process.env.DATABASE_USER;
+const password = process.env.DATABASE_PASSWORD;
+const host = process.env.DATABASE_HOST;
+const port = process.env.DATABASE_PORT;
+const name = process.env.DATABASE_NAME;
 let PrismaService = class PrismaService extends client_1.PrismaClient {
     constructor() {
         super({
             datasources: {
                 db: {
-                    url: process.env.DATABASE_URL ||
-                        'mysql://jeremiasgomez:clemente90@localhost:3306/sijamdb?schema=public',
+                    url: `mysql://${user}:${password}@${host}:${port}/${name}?schema=public`
                 },
             },
         });
