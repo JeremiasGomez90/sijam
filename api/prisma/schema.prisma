@@ -44,6 +44,7 @@ model Planta {
   nombre String
   locacion String?
   contratos Contrato[]
+  fichadas Fichada[]
   baja Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -66,6 +67,7 @@ model Grupo {
   contratoId Int?
   contrato Contrato? @relation(fields: [contratoId], references: [id])
   baja Boolean @default(false)
+  adicionales  Adicional[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -109,4 +111,28 @@ model NovedadesReferencias {
   referenciaId  Int
   novedad       Novedad    @relation(fields: [novedadId], references: [id], onDelete: Cascade)
   referencia    Referencia @relation(fields: [referenciaId], references: [id], onDelete: Cascade)
+  adicionales  Adicional[]
+}
+
+model Adicional {
+  id            Int                   @id @default(autoincrement())
+  valor        String                @unique
+  grupoId Int
+  novedadReferenciaId Int
+  grupo       Grupo    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  novedadesReferencias    NovedadesReferencias @relation(fields: [novedadReferenciaId], references: [id], onDelete: Cascade)
+  baja Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Fichada {
+  id            Int                   @id @default(autoincrement())
+  plantaId Int?
+  planta Planta? @relation(fields: [plantaId], references: [id])
+  nombre_archivo   String
+  baja Boolean @default(false)
+  fecha_subida   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
