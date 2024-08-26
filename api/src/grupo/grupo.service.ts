@@ -42,4 +42,32 @@ export class GrupoService {
       },
     });
   }
+
+  async findOne(id: number): Promise<Grupo> {
+    const row = await this.prisma.grupo.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return row;
+  }
+
+  async update(data: Grupo): Promise<Grupo> {
+    const { id } = data;
+    const row = await this.prisma.grupo.findUnique({ where: { id } });
+    if (!row) {
+      throw new NotFoundException();
+    }
+
+    return await this.prisma.grupo.update({
+      where: {
+        id,
+      },
+      data: {
+        nombre: data.nombre,
+        contratoId: +data.contratoId,
+      },
+    });
+  }
 }

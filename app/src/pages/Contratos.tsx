@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { PlusIcon, Info, Trash, Search } from "lucide-react";
+import { PlusIcon, Info, Trash, Search, Edit } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -84,10 +84,10 @@ export default function Contratos() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((Contrato) => (
-            <TableRow key={Contrato.id}>
-              <TableCell className="py-2">{Contrato.nombre}</TableCell>
-              <TableCell className="py-2">{Contrato.plantaId}</TableCell>
+          {data.map((contrato) => (
+            <TableRow key={contrato.id}>
+              <TableCell className="py-2">{contrato.nombre}</TableCell>
+              <TableCell className="py-2">{contrato.plantaId}</TableCell>
               <TableCell className="flex gap-2 py-2 justify-end">
                 <TooltipProvider delayDuration={0}>
                   <Tooltip disableHoverableContent>
@@ -106,6 +106,20 @@ export default function Contratos() {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
+
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip disableHoverableContent>
+                    <TooltipTrigger>
+                      <Button variant="outline" size="sm" className="text-yellow-600 hover:bg-yellow-700 hover:text-white" onClick={() => navigate(`/contrato/${contrato.id}`)}>
+                        <Edit className="text-yellow-600 hover:bg-ye;low-700 hover:text-white"/>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Modificar</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
                 <TooltipProvider delayDuration={0}>
                   <Tooltip disableHoverableContent>
                     <TooltipTrigger>
@@ -113,7 +127,7 @@ export default function Contratos() {
                         variant="outline"
                         size="sm"
                         className="text-red-600 hover:bg-red-700 hover:text-white disabled:cursor-not-allowed"
-                        onClick={() => eliminar(Contrato.id || 0)}
+                        onClick={() => eliminar(contrato.id || 0)}
                       >
                         <Trash className="h-5 w-5" />
                       </Button>

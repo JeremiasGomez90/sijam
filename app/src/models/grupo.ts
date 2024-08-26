@@ -1,5 +1,5 @@
 export type Grupo = {
   id?: number;
-  contratoId?: number;
+  contratoId?: string | number | undefined;
   nombre: string;
 };

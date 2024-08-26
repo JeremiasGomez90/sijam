@@ -40,4 +40,29 @@ export class EmpleadoService {
       },
     });
   }
+
+  async findOne(id: number): Promise<Empleado> {
+    const row = await this.prisma.empleado.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return row;
+  }
+
+  async update(data: Empleado): Promise<Empleado> {
+    const { id } = data;
+    const row = await this.prisma.empleado.findUnique({ where: { id } });
+    if (!row) {
+      throw new NotFoundException();
+    }
+
+    return await this.prisma.empleado.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
 }

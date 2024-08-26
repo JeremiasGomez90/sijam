@@ -14,7 +14,7 @@ import { Planta } from '@prisma/client';
 
 @Controller('planta')
 export class PlantaController {
-  constructor(private plantaService: PlantaService) {}
+  constructor(private plantaService: PlantaService) { }
 
   @Post('')
   @HttpCode(HttpStatus.CREATED)
@@ -32,5 +32,17 @@ export class PlantaController {
   @HttpCode(HttpStatus.OK)
   unsubscribe(@Param('id') id: number): Promise<Planta> {
     return this.plantaService.unsubscribe(id);
+  }
+
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  findOne(@Param('id') id: number): Promise<Planta> {
+    return this.plantaService.findOne(id);
+  }
+
+  @Put('/upload')
+  @HttpCode(HttpStatus.OK)
+  update(@Body() data: Planta): Promise<Planta> {
+    return this.plantaService.update(data);
   }
 }

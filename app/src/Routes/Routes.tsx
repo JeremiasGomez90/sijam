@@ -18,6 +18,12 @@ import Referencias from "@/pages/Referencias";
 import NewReferencia from "@/pages/NewReferencia";
 import Contratos from "@/pages/Contratos";
 import NewContrato from "@/pages/NewContrato";
+import EditEmpleado from "@/pages/EditEmpleado";
+import EditPlanta from "@/pages/EditPlanta";
+import EditContrato from "@/pages/EditContrato";
+import EditGrupo from "@/pages/EditGrupo";
+import EditNovedad from "@/pages/EditNovedad";
+import EditReferencia from "@/pages/EditReferencia";
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +64,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/empleado/:id",
+        element: (
+          <ProtectedRoute>
+            <EditEmpleado />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "plantas",
         element: (
           <ProtectedRoute>
@@ -70,6 +84,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <NewPlanta />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "planta/:id",
+        element: (
+          <ProtectedRoute>
+            <EditPlanta />
           </ProtectedRoute>
         ),
       },
@@ -90,6 +112,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "contrato/:id",
+        element: (
+          <ProtectedRoute>
+            <EditContrato />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "grupos",
         element: (
           <ProtectedRoute>
@@ -102,6 +132,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <NewGrupo />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "grupos/:id",
+        element: (
+          <ProtectedRoute>
+            <EditGrupo />
           </ProtectedRoute>
         ),
       },
@@ -122,6 +160,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "novedades/:id",
+        element: (
+          <ProtectedRoute>
+            <EditNovedad />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "referencias",
         element: (
           <ProtectedRoute>
@@ -134,6 +180,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <NewReferencia />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "referencias/:id",
+        element: (
+          <ProtectedRoute>
+            <EditReferencia />
           </ProtectedRoute>
         ),
       },

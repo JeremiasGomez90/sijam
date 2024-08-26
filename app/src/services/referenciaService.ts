@@ -30,3 +30,21 @@ export const bajaReferencia = async (id: number) => {
     handleError(error);
   }
 };
+
+export const getReferencia = async (id: string) => {
+  try {
+    const res = await axios.get(`${api}/${id}`);
+    return res;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const updateReferencia = async (data: Referencia) => {
+  try {
+    const res = await axios.put(`${api}/upload`, data);
+    return res;
+  } catch (error) {
+    handleError(error);
+  }
+};

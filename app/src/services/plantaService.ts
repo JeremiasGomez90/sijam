@@ -30,3 +30,21 @@ export const bajaPlanta = async (id: number) => {
     handleError(error);
   }
 };
+
+export const getPlanta = async (id: string) => {
+  try {
+    const res = await axios.get(`${api}/${id}`);
+    return res;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const updatePlanta = async (data: Planta) => {
+  try {
+    const res = await axios.put(`${api}/upload`, data);
+    return res;
+  } catch (error) {
+    handleError(error);
+  }
+};

@@ -7,6 +7,7 @@ import { GrupoModule } from './grupo/grupo.module';
 import { NovedadModule } from './novedad/novedad.module';
 import { ReferenciaModule } from './referencias/referencia.module';
 import { ContratoModule } from './contrato/contrato.module';
+import { AdicionalModule } from './adicional/adicional.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ContratoModule } from './contrato/contrato.module';
     GrupoModule,
     NovedadModule,
     ReferenciaModule,
+    AdicionalModule,
   ],
 })
 export class AppModule {}

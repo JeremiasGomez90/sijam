@@ -33,4 +33,16 @@ export class ContratoController {
   unsubscribe(@Param('id') id: number): Promise<Contrato> {
     return this.contratoService.unsubscribe(id);
   }
+
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  findOne(@Param('id') id: number): Promise<Contrato> {
+    return this.contratoService.findOne(id);
+  }
+
+  @Put('/upload')
+  @HttpCode(HttpStatus.OK)
+  update(@Body() data: Contrato): Promise<Contrato> {
+    return this.contratoService.update(data);
+  }
 }

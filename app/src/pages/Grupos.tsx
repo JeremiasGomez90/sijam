@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { PlusIcon, Info, Trash, Search } from "lucide-react";
+import { PlusIcon, Info, Trash, Search, Edit } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -106,6 +106,20 @@ export default function Grupos() {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
+
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip disableHoverableContent>
+                    <TooltipTrigger>
+                      <Button variant="outline" size="sm" className="text-yellow-600 hover:bg-yellow-700 hover:text-white" onClick={() => navigate(`/grupo/${grupo.id}`)}>
+                        <Edit className="text-yellow-600 hover:bg-ye;low-700 hover:text-white"/>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Modificar</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
                 <TooltipProvider delayDuration={0}>
                   <Tooltip disableHoverableContent>
                     <TooltipTrigger>

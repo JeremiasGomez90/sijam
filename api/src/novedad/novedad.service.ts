@@ -39,4 +39,29 @@ export class NovedadService {
       },
     });
   }
+
+  async findOne(id: number): Promise<Novedad> {
+    const row = await this.prisma.novedad.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return row;
+  }
+
+  async update(data: Novedad): Promise<Novedad> {
+    const { id } = data;
+    const row = await this.prisma.novedad.findUnique({ where: { id } });
+    if (!row) {
+      throw new NotFoundException();
+    }
+
+    return await this.prisma.novedad.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
 }

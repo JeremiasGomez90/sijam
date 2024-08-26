@@ -33,4 +33,16 @@ export class NovedadController {
   unsubscribe(@Param('id') id: number): Promise<Novedad> {
     return this.novedadService.unsubscribe(id);
   }
+
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  findOne(@Param('id') id: number): Promise<Novedad> {
+    return this.novedadService.findOne(id);
+  }
+
+  @Put('/upload')
+  @HttpCode(HttpStatus.OK)
+  update(@Body() data: Novedad): Promise<Novedad> {
+    return this.novedadService.update(data);
+  }
 }

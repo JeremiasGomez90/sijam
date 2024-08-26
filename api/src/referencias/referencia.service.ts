@@ -39,4 +39,29 @@ export class ReferenciaService {
       },
     });
   }
+
+  async findOne(id: number): Promise<Referencia> {
+    const row = await this.prisma.referencia.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return row;
+  }
+
+  async update(data: Referencia): Promise<Referencia> {
+    const { id } = data;
+    const row = await this.prisma.referencia.findUnique({ where: { id } });
+    if (!row) {
+      throw new NotFoundException();
+    }
+
+    return await this.prisma.referencia.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
 }

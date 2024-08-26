@@ -45,4 +45,32 @@ export class ContratoService {
       },
     });
   }
+
+  async findOne(id: number): Promise<Contrato> {
+    const row = await this.prisma.contrato.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return row;
+  }
+
+  async update(data: Contrato): Promise<Contrato> {
+    const { id } = data;
+    const row = await this.prisma.contrato.findUnique({ where: { id } });
+    if (!row) {
+      throw new NotFoundException();
+    }
+
+    return await this.prisma.contrato.update({
+      where: {
+        id,
+      },
+      data: {
+        nombre: data.nombre,
+        plantaId: +data.plantaId,
+      },
+    });
+  }
 }

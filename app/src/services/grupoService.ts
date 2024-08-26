@@ -30,3 +30,21 @@ export const bajaGrupo = async (id: number) => {
     handleError(error);
   }
 };
+
+export const getGrupo = async (id: string) => {
+  try {
+    const res = await axios.get(`${api}/${id}`);
+    return res;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+export const updateGrupo = async (data: Grupo) => {
+  try {
+    const res = await axios.put(`${api}/upload`, data);
+    return res;
+  } catch (error) {
+    handleError(error);
+  }
+};

@@ -39,4 +39,29 @@ export class PlantaService {
       },
     });
   }
+
+  async findOne(id: number): Promise<Planta> {
+    const Planta = await this.prisma.planta.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return Planta;
+  }
+
+  async update(data: Planta): Promise<Planta> {
+    const { id } = data;
+    const row = await this.prisma.planta.findUnique({ where: { id } });
+    if (!row) {
+      throw new NotFoundException();
+    }
+
+    return await this.prisma.planta.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
 }

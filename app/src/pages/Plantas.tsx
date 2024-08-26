@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, Info, Trash, Search } from "lucide-react";
+import { PlusIcon, Info, Trash, Search, Edit } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -99,6 +99,18 @@ export default function Plantas() {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>Informacion</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip disableHoverableContent>
+                    <TooltipTrigger>
+                      <Button variant="outline" size="sm" disabled className="text-yellow-600 hover:bg-yellow-700 hover:text-white" onClick={() => navigate(`/planta/${p.id}`)} >
+                        <Edit className="text-yellow-600 hover:bg-yellow-700 hover:text-white" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Modificar</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

@@ -33,4 +33,16 @@ export class EmpleadoController {
   unsubscribe(@Param('id') id: number): Promise<Empleado> {
     return this.empleadoService.unsubscribe(id);
   }
+
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  findOne(@Param('id') id: number): Promise<Empleado> {
+    return this.empleadoService.findOne(id);
+  }
+
+  @Put('/upload')
+  @HttpCode(HttpStatus.OK)
+  update(@Body() data: Empleado): Promise<Empleado> {
+    return this.empleadoService.update(data);
+  }
 }
