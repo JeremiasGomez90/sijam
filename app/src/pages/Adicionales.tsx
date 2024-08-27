@@ -1,7 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, Info, Trash, Search, Edit } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -9,92 +7,91 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip"
+import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Planta } from "@/models/planta";
-import { bajaPlanta, getPlantas } from "@/services/plantaService";
+import { bajaAdicional, getAdicionales } from "@/services/adicionalService";
 import { confirmAlert } from "@/utils/alerts";
+import { Adicional } from "@/models/adicional";
 
-export default function Plantas() {
+export default function Adicionales() {
   const navigate = useNavigate();
-  const [data, setData] = useState<Planta[]>([]);
+  const [data, setData] = useState<Adicional[]>([]);
 
   useEffect(() => {
-    getPlantas().then((res) => {
-      if (res?.data) setData(res?.data);
-    });
+    getAdicionales()
+      .then((res) => {
+        if (res?.data) setData(res?.data);
+      })
   }, []);
 
-  const eliminar = async (id: number | string) => {
+  const eliminar = async (id: number) => {
     const alert = await confirmAlert({
-      title: "¿Eliminar Planta?",
+      title: "¿Eliminar Adicional?",
     });
 
     if (alert.isConfirmed) {
-      bajaPlanta(id).then((res) => {
-        if (res) {
-          getPlantas().then((res) => {
-            if (res?.data) setData(res?.data);
-          });
-        }
-      });
+      bajaAdicional(id)
+        .then((res) => {
+          if (res) {
+            getAdicionales().then((res) => {
+              if (res?.data) setData(res?.data);
+            });
+          }
+        })
     }
   };
 
-  return (
+  return (  
     <div className="h-full p-4">
       <div className="w-full flex justify-between items-center border-b mb-3 pb-3">
         <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            className="bg-green-600 text-white hover:bg-green-600"
-            onClick={() => navigate("/plantas/crear")}
-          >
+          <Button variant="ghost" className="bg-green-600 text-white hover:bg-green-600" onClick={() => navigate("/Adicionales/crear")}>
             <span>Agregar</span>
             <PlusIcon className="h-5 w-5" />
           </Button>
-          <h1 className="text-xl font-bold">Plantas</h1>
+          <h1 className="text-xl font-bold">Lista de Adicionales</h1>
         </div>
         <div className="flex items-center w-full max-w-md gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Buscar planta..."
+              placeholder="Buscar Adicional..."
               className="w-full pl-12 pr-4 py-2 rounded-md border border-gray-400 focus:border-primary focus:ring-primary bg-background text-foreground"
             />
           </div>
         </div>
       </div>
-      <Table>
+      <Table >
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Numero</TableHead>
+            <TableHead>Numero</TableHead>
             <TableHead>Nombre</TableHead>
+            <TableHead>Apellido</TableHead>
+            <TableHead>CUIT</TableHead>
             <TableHead className="text-right pr-[40px]">Acciones</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((p) => (
-            <TableRow key={p.id}>
-              <TableCell className="font-medium py-2">{p.id}</TableCell>
-              <TableCell className="py-2">{p.nombre}</TableCell>
+          {data.map((e) => (
+            <TableRow key={e.id}>
+              <TableCell className="font-medium py-2">{e.valor}</TableCell>
+              <TableCell className="py-2">{e.grupoId}</TableCell>
+              <TableCell className="py-2">{e.novedadReferenciaId}</TableCell>
               <TableCell className="flex gap-2 py-2 justify-end">
                 <TooltipProvider delayDuration={0}>
                   <Tooltip disableHoverableContent>
                     <TooltipTrigger>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-blue-600 hover:bg-blue-700 hover:text-white"
-                      >
-                        <Info className="h-5 w-5" />
+                      <Button variant="outline" size="sm" disabled className="text-blue-600 hover:bg-blue-700 hover:text-white cursor-not-allowed">
+                        <Info className="text-blue-600 hover:bg-blue-700 hover:text-white cursor-not-allowed" />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -102,11 +99,12 @@ export default function Plantas() {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
+                
                 <TooltipProvider delayDuration={0}>
                   <Tooltip disableHoverableContent>
                     <TooltipTrigger>
-                      <Button variant="outline" size="sm" className="text-yellow-600 hover:bg-yellow-700 hover:text-white" onClick={() => navigate(`/planta/${p.id}`)} >
-                        <Edit className="text-yellow-600 hover:bg-yellow-700 hover:text-white" />
+                      <Button variant="outline" size="sm" className="text-yellow-600 hover:bg-yellow-700 hover:text-white" onClick={() => navigate(`/adicional/${e.id}`)}>
+                        <Edit className="text-yellow-600 hover:bg-ye;low-700 hover:text-white"/>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -114,15 +112,11 @@ export default function Plantas() {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-                <TooltipProvider delayDuration={0}>
+
+                <TooltipProvider delayDuration={0} >
                   <Tooltip disableHoverableContent>
                     <TooltipTrigger>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-red-600 hover:bg-red-700 hover:text-white"
-                        onClick={() => eliminar(p.id || 0)}
-                      >
+                      <Button variant="outline" size="sm" className="text-red-600 hover:bg-red-700 hover:text-white disabled:cursor-not-allowed" onClick={() => eliminar(e.id || 0)}>
                         <Trash className="h-5 w-5" />
                       </Button>
                     </TooltipTrigger>
@@ -137,5 +131,5 @@ export default function Plantas() {
         </TableBody>
       </Table>
     </div>
-  );
+  )
 }

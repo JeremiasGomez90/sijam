@@ -1,10 +1,10 @@
 import axios from "@/api/axios";
 import { handleError } from "../helpers/ErrorHandler";
-import { Grupo } from "@/models/grupo";
+import { Adicional } from "@/models/adicional";
 
-const api = "/grupo";
+const api = "/adicional";
 
-export const createGrupo = async (data: Grupo) => {
+export const createAdicional = async (data: Adicional) => {
   try {
     const res = await axios.post(api, data);
     return res;
@@ -13,7 +13,7 @@ export const createGrupo = async (data: Grupo) => {
   }
 };
 
-export const getGrupos = async () => {
+export const getAdicionales = async () => {
   try {
     const res = await axios.get(api);
     return res;
@@ -22,7 +22,7 @@ export const getGrupos = async () => {
   }
 };
 
-export const bajaGrupo = async (id: number) => {
+export const bajaAdicional = async (id: number) => {
   try {
     const res = await axios.put(`${api}/unsubscribe/${id}`);
     return res;
@@ -31,7 +31,7 @@ export const bajaGrupo = async (id: number) => {
   }
 };
 
-export const getGrupo = async (id: string) => {
+export const getAdicional = async (id: string) => {
   try {
     const res = await axios.get(`${api}/${id}`);
     return res;
@@ -40,7 +40,7 @@ export const getGrupo = async (id: string) => {
   }
 };
 
-export const updateGrupo = async (data: Grupo) => {
+export const updateAdicional = async (data: Adicional) => {
   try {
     const res = await axios.put(`${api}/upload`, data);
     return res;

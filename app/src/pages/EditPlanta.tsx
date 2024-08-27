@@ -36,6 +36,9 @@ export default function EditPlanta() {
         nombre: z.string().min(1).max(50),
       })
     ),
+    defaultValues: {
+      nombre: ""
+    },
     values: useMemo(() => {
       return values;
     }, [values]),
@@ -63,10 +66,11 @@ export default function EditPlanta() {
             id: values.id,
             ...data,
           });
+          
+          toast({ description: "Planta modificado correctamente" });
+          navigate("/plantas");
         }
       }
-      toast({ description: "Planta creada correctamente" });
-      navigate("/plantas");
     } catch (error) {
       toast({
         description: "Hubo un error al modificar el empleado",

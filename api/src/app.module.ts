@@ -5,9 +5,10 @@ import { EmpleadoModule } from './empleado/empleado.module';
 import { PlantaModule } from './planta/planta.module';
 import { GrupoModule } from './grupo/grupo.module';
 import { NovedadModule } from './novedad/novedad.module';
-import { ReferenciaModule } from './referencias/referencia.module';
+import { ReferenciaModule } from './referencia/referencia.module';
 import { ContratoModule } from './contrato/contrato.module';
 import { AdicionalModule } from './adicional/adicional.module';
+import { NovedadesReferenciasModule } from './novedadesReferencias/novedadesReferencias.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AdicionalModule } from './adicional/adicional.module';
     GrupoModule,
     NovedadModule,
     ReferenciaModule,
+    NovedadesReferenciasModule,
     AdicionalModule,
   ],
 })

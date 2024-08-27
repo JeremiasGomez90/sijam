@@ -24,6 +24,9 @@ import EditContrato from "@/pages/EditContrato";
 import EditGrupo from "@/pages/EditGrupo";
 import EditNovedad from "@/pages/EditNovedad";
 import EditReferencia from "@/pages/EditReferencia";
+import Adicionales from "@/pages/Adicionales";
+import NewAdicional from "@/pages/NewAdicional";
+import EditAdicional from "@/pages/EditAdicional";
 
 export const router = createBrowserRouter([
   {
@@ -136,7 +139,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "grupos/:id",
+        path: "grupo/:id",
         element: (
           <ProtectedRoute>
             <EditGrupo />
@@ -160,7 +163,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "novedades/:id",
+        path: "novedad/:id",
         element: (
           <ProtectedRoute>
             <EditNovedad />
@@ -184,10 +187,35 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "referencias/:id",
+        path: "referencia/:id",
         element: (
           <ProtectedRoute>
             <EditReferencia />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "adicionales",
+        element: (
+          <ProtectedRoute>
+            <Adicionales />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "adicionales/crear",
+        element: (
+          <ProtectedRoute>
+            <NewAdicional />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "adicional/:id",
+        id: "edit-adicional",
+        element: (
+          <ProtectedRoute>
+            <EditAdicional />
           </ProtectedRoute>
         ),
       },

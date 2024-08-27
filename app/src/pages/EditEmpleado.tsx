@@ -33,13 +33,13 @@ export default function EditEmpleado() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const params = useParams();
-  const [empleado, setEmpleado] = useState<Empleado>();
+  const [values, setValues] = useState<Empleado>();
 
   useEffect(() => {
     if (params?.id) {
       getEmpleado(params?.id).then((res) => {
         if (res?.data) {
-          setEmpleado(res.data);
+          setValues(res.data);
         }
       });
     }
@@ -59,9 +59,17 @@ export default function EditEmpleado() {
         direccion: z.string().min(1).max(50),
       })
     ),
+    defaultValues: {
+      numero: '',
+      cuit: '',
+      nombre: '',
+      apellido: '',
+      telefono: '',
+      direccion: '',
+    },
     values: useMemo(() => {
-      return empleado;
-    }, [empleado]),
+      return values;
+    }, [values]),
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -71,15 +79,16 @@ export default function EditEmpleado() {
       });
 
       if (alert.isConfirmed) {
-        if (empleado) {
+        if (values) {
           await updateEmpleado({
-            id: empleado.id,
+            id: values.id,
             ...data,
           });
+
+          toast({ description: "Empleado modificado correctamente" });
+          navigate("/empleados");
         }
       }
-      toast({ description: "Empleado modificado correctamente" });
-      navigate("/empleados");
     } catch (error) {
       toast({
         description: "Hubo un error al modificar el empleado",

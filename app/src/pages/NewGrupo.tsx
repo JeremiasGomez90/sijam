@@ -121,6 +121,8 @@ export default function NewGrupo() {
                     control={form.control}
                     name={e.name}
                     render={({ field }) => {
+                      const value = e.options?.find(a => field.value && +a.value === +field.value);
+
                       return (
                         <FormItem>
                           <FormLabel>{e.label}</FormLabel>
@@ -136,7 +138,7 @@ export default function NewGrupo() {
                                   onBlur={field.onBlur}
                                   ref={field.ref}
                                 >
-                                  {field.value}
+                                   {value?.label || field.value}
                                 </SelectValue>
                               </SelectTrigger>
                               <SelectContent>

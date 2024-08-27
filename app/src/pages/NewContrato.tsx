@@ -48,7 +48,6 @@ export default function NewContrato() {
       plantaId: "",
     },
   });
-
   const [plantas, setPlantas] = useState([]);
 
   useEffect(() => {
@@ -122,12 +121,13 @@ export default function NewContrato() {
                     control={form.control}
                     name={e.name}
                     render={({ field }) => {
+                      const value = e.options?.find(a => +a.value === +field.value);
+
                       return (
                         <FormItem>
                           <FormLabel>{e.label}</FormLabel>
                           <FormControl>
                             <Select
-                              value={field.value}
                               onValueChange={field.onChange}
                               name={field.name}
                               required
@@ -137,7 +137,7 @@ export default function NewContrato() {
                                   onBlur={field.onBlur}
                                   ref={field.ref}
                                 >
-                                  {field.value}
+                                  {value?.label || field.value}
                                 </SelectValue>
                               </SelectTrigger>
                               <SelectContent>

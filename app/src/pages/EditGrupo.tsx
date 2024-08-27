@@ -40,24 +40,18 @@ export default function EditGrupo() {
   const form = useForm({
     resolver: zodResolver(
       z.object({
-        nombre: z.string().min(1).max(50),
+        nombre: z.string(),
         contratoId: z.string(),
       })
     ),
+    defaultValues: {
+      nombre: "",
+      contratoId: "",
+    },
     values: useMemo(() => {
       return values;
     }, [values]),
   });
-
-  useEffect(() => {
-    if (params?.id) {
-      getGrupo(params?.id).then((res) => {
-        if (res?.data) {
-          setValues(res.data);
-        }
-      });
-    }
-  }, [params.id]);
 
   useEffect(() => {
     getContratos().then((res) => {
@@ -71,8 +65,16 @@ export default function EditGrupo() {
             };
           })
         );
+
+      if (params?.id) {
+        getGrupo(params?.id).then((res) => {
+          if (res?.data) {
+            setValues(res.data);
+          }
+        });
+      }
     });
-  }, []);
+  }, [params.id]);
 
   const onSubmit: SubmitHandler<Grupo> = async (data) => {
     try {
@@ -86,10 +88,11 @@ export default function EditGrupo() {
             id: values.id,
             ...data,
           });
+
+          toast({ description: "Grupo modificado correctamente" });
+          navigate("/grupos");
         }
       }
-      toast({ description: "Grupo creado correctamente" });
-      navigate("/grupos");
     } catch (error) {
       toast({
         description: "Hubo un error al modificar el grupo",
@@ -141,6 +144,10 @@ export default function EditGrupo() {
                     control={form.control}
                     name={e.name}
                     render={({ field }) => {
+                      const value = e.options?.find(
+                        (a) => field.value && +a.value === +field.value
+                      );
+
                       return (
                         <FormItem>
                           <FormLabel>{e.label}</FormLabel>
@@ -156,7 +163,7 @@ export default function EditGrupo() {
                                   onBlur={field.onBlur}
                                   ref={field.ref}
                                 >
-                                  {field.value}
+                                  {value?.label || field.value}
                                 </SelectValue>
                               </SelectTrigger>
                               <SelectContent>

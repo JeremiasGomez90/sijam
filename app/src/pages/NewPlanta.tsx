@@ -32,7 +32,6 @@ export default function NewPlanta() {
     ),
     defaultValues: {
       nombre: "",
-      test: "",
     },
   });
 

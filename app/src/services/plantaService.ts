@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from "@/api/axios";
 import { handleError } from "../helpers/ErrorHandler";
 import { Planta } from "@/models/planta";
 
-const api = "http://localhost:8000/planta";
+const api = "/planta";
 
 export const createPlanta = async (data: Planta) => {
   try {
@@ -22,7 +22,7 @@ export const getPlantas = async () => {
   }
 };
 
-export const bajaPlanta = async (id: number) => {
+export const bajaPlanta = async (id: number | string) => {
   try {
     const res = await axios.put(`${api}/unsubscribe/${id}`);
     return res;

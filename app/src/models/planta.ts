@@ -1,4 +1,4 @@
 export type Planta = {
-  id?: number;
+  id?: number | string;
   nombre: string;
 };

@@ -35,6 +35,11 @@ export default function EditReferencia() {
         descripcion: z.string(),
       })
     ),
+    defaultValues: {
+      codigo: "",
+      nombre: "",
+      descripcion: "",
+    },
     values: useMemo(() => {
       return values;
     }, [values]),
@@ -50,7 +55,6 @@ export default function EditReferencia() {
     }
   }, [params.id]);
 
-
   const onSubmit: SubmitHandler<Referencia> = async (data) => {
     try {
       const alert = await confirmAlert({
@@ -64,9 +68,9 @@ export default function EditReferencia() {
             ...data,
           });
         }
+        toast({ description: "Referencia modificada correctamente" });
+        navigate("/referencias");
       }
-      toast({ description: "Referencia modificada correctamente" });
-      navigate("/referencias");
     } catch (error) {
       toast({
         description: "Hubo un error al modificar referencia",
@@ -75,22 +79,25 @@ export default function EditReferencia() {
     }
   };
 
-  const fields: { label: string; name: "codigo" | "nombre" | "descripcion", type?: string; }[] =
-    [
-      {
-        label: "Codigo",
-        name: "codigo",
-      },
-      {
-        label: "Nombre",
-        name: "nombre",
-      },
-      {
-        label: "Descripción",
-        name: "descripcion",
-        type: "textarea"
-      },
-    ];
+  const fields: {
+    label: string;
+    name: "codigo" | "nombre" | "descripcion";
+    type?: string;
+  }[] = [
+    {
+      label: "Codigo",
+      name: "codigo",
+    },
+    {
+      label: "Nombre",
+      name: "nombre",
+    },
+    {
+      label: "Descripción",
+      name: "descripcion",
+      type: "textarea",
+    },
+  ];
 
   return (
     <div className="h-full p-4">
@@ -115,7 +122,11 @@ export default function EditReferencia() {
                   <FormItem>
                     <FormLabel>{e.label}</FormLabel>
                     <FormControl>
-                     {e.type === "textarea" ? <Textarea placeholder={e.label} {...field} /> : <Input placeholder={e.label} {...field} />}
+                      {e.type === "textarea" ? (
+                        <Textarea placeholder={e.label} {...field} />
+                      ) : (
+                        <Input placeholder={e.label} {...field} />
+                      )}
                     </FormControl>
                   </FormItem>
                 )}

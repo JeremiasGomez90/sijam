@@ -35,6 +35,11 @@ export default function EditNovedad() {
         descripcion: z.string(),
       })
     ),
+    defaultValues: {
+      codigo: "",
+      nombre: "",
+      descripcion: "",
+    },
     values: useMemo(() => {
       return values;
     }, [values]),
@@ -62,10 +67,11 @@ export default function EditNovedad() {
             id: values.id,
             ...data,
           });
+          
+          toast({ description: "Novedad modificada correctamente" });
+          navigate("/novedades");
         }
       }
-      toast({ description: "Novedad modificada correctamente" });
-      navigate("/novedades");
     } catch (error) {
       toast({
         description: "Hubo un error al modificar la novedad",

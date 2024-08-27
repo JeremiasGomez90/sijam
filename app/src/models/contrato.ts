@@ -1,5 +1,5 @@
 export type Contrato = {
   id?: number;
-  plantaId?: number | string;
+  plantaId?: string;
   nombre: string;
 };

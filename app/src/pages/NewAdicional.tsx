@@ -1,5 +1,5 @@
 import { ChevronLeft } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,6 +15,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import { createAdicional } from "@/services/adicionalService";
 import {
   Select,
   SelectContent,
@@ -24,40 +25,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useMemo, useState } from "react";
-import { getPlantas } from "@/services/plantaService";
-import { Planta } from "@/models/planta";
-import { getContrato, updateContrato } from "@/services/contratoService";
-import { Contrato } from "@/models/contrato";
-import { confirmAlert } from "@/utils/alerts";
+import { Adicional } from "@/models/adicional";
+import { getNovedadesReferencias } from "@/services/novedadReferenciasService";
+import { getGrupos } from "@/services/grupoService";
+import { Grupo } from "@/models/grupo";
+import { NovedadReferencia } from "@/models/novedadReferencia";
 
-export default function EditContrato() {
+export default function NewAdicional() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const params = useParams();
-  const [values, setValues] = useState<Contrato>();
-  const [plantas, setPlantas] = useState([]);
-
   const form = useForm({
     resolver: zodResolver(
       z.object({
-        nombre: z.string(),
-        plantaId: z.string(),
+        valor: z.string(),
+        grupoId: z.string(),
+        novedadReferenciaId: z.string(),
       })
     ),
     defaultValues: {
-      nombre: "",
-      plantaId: "",
+      valor: "",
+      grupoId: "",
+      novedadReferenciaId: "",
     },
-    values: useMemo(() => {
-      return values;
-    }, [values]),
   });
 
+  const [grupos, setGrupos] = useState([]);
+  const [novedadesReferencias, setNovedadesReferencias] = useState([]);
+
   useEffect(() => {
-    getPlantas().then((res) => {
-      if (res?.data) {
-        setPlantas(
-          res?.data.map((e: Planta) => {
+    getGrupos().then((res) => {
+      if (res?.data)
+        setGrupos(
+          res?.data.map((e: Grupo) => {
             return {
               ...e,
               label: e.nombre,
@@ -65,38 +64,29 @@ export default function EditContrato() {
             };
           })
         );
-
-        if (params?.id) {
-          getContrato(params?.id).then((res) => {
-            if (res?.data) {
-              setValues(res.data);
-            }
-          });
-        }
-      }
     });
-  }, [params.id]);
+    getNovedadesReferencias().then((res) => {
+      if (res?.data)
+        setNovedadesReferencias(
+          res?.data.map((e: NovedadReferencia) => {
+            return {
+              ...e,
+              label: `${e.novedad?.nombre} - ${e.referencia?.nombre}`,
+              value: e.id,
+            };
+          })
+        );
+    });
+  }, []);
 
-  const onSubmit: SubmitHandler<Contrato> = async (data) => {
+  const onSubmit: SubmitHandler<Adicional> = async (data) => {
     try {
-      const alert = await confirmAlert({
-        title: "Guardar cambios?",
-      });
-
-      if (alert.isConfirmed) {
-        if (values) {
-          await updateContrato({
-            id: values.id,
-            ...data,
-          });
-
-          toast({ description: "Contrato modificado correctamente" });
-          navigate("/contratos");
-        }
-      }
+      await createAdicional(data);
+      toast({ description: "Adicional creada correctamente" });
+      navigate("/adicionales");
     } catch (error) {
       toast({
-        description: "Hubo un error al modificar el contrato",
+        description: "Hubo un error al crear el Adicional",
         variant: "destructive",
       });
     }
@@ -104,33 +94,40 @@ export default function EditContrato() {
 
   const fields: {
     label: string;
-    name: "nombre" | "plantaId";
+    name: "valor" | "grupoId" | "novedadReferenciaId";
     type?: string;
     options?: { label: string; value: string }[];
   }[] = useMemo(
     () => [
       {
-        label: "Nombre",
-        name: "nombre",
+        label: "Valor",
+        name: "valor",
+        type: "number"
       },
       {
-        label: "Planta",
-        name: "plantaId",
+        label: "Grupo",
+        name: "grupoId",
         type: "select",
-        options: plantas,
+        options: grupos,
+      },
+      {
+        label: "Novedad y Referencia",
+        name: "novedadReferenciaId",
+        type: "select",
+        options: novedadesReferencias,
       },
     ],
-    [plantas]
+    [grupos, novedadesReferencias]
   );
 
   return (
     <div className="h-full p-4">
       <div className="flex items-center gap-4 border-b mb-3 pb-3">
-        <Button variant="outline" onClick={() => navigate("/contratos")}>
+        <Button variant="outline" onClick={() => navigate("/adicionales")}>
           <ChevronLeft className="h-6 w-6" />
           <span className="text-sm font-semibold">Volver</span>
         </Button>
-        <h1 className="text-xl font-bold">Editar Contrato</h1>
+        <h1 className="text-xl font-bold">Agregar Nuevo Adicional</h1>
       </div>
       <Form {...form}>
         <form
@@ -138,16 +135,14 @@ export default function EditContrato() {
           onSubmit={form.handleSubmit(onSubmit)}
         >
           {fields.map((e) => {
-            if (e.type) {
+            if (e.type === "select") {
               return (
                 <div key={e.name} className="space-y-2">
                   <FormField
                     control={form.control}
                     name={e.name}
                     render={({ field }) => {
-                      const value = e.options?.find(
-                        (a) => field.value && +a.value === +field.value
-                      );
+                      const value = e.options?.find(a => field.value && +a.value === +field.value);
 
                       return (
                         <FormItem>
@@ -164,7 +159,7 @@ export default function EditContrato() {
                                   onBlur={field.onBlur}
                                   ref={field.ref}
                                 >
-                                  {value?.label || field.value}
+                                   {value?.label || field.value}
                                 </SelectValue>
                               </SelectTrigger>
                               <SelectContent>
@@ -199,7 +194,7 @@ export default function EditContrato() {
                       <FormItem>
                         <FormLabel>{e.label}</FormLabel>
                         <FormControl>
-                          <Input placeholder={e.label} {...field} />
+                          <Input placeholder={e.label} type={e.type} {...field} />
                         </FormControl>
                       </FormItem>
                     )}

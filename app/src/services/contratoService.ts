@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from "@/api/axios";
 import { handleError } from "../helpers/ErrorHandler";
 import { Contrato } from "@/models/contrato";
 
-const api = "http://localhost:8000/contrato";
+const api = "/contrato";
 
 export const createContrato = async (data: Contrato) => {
   try {

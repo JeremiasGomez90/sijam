@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "@/api/axios";
 import { useToast } from "@/components/ui/use-toast";
 
 export const handleError = (error: any) => {

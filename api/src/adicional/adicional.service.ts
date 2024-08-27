@@ -5,10 +5,14 @@ import { AdicionalDto } from './dto';
 
 @Injectable()
 export class AdicionalService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
   async create(data: AdicionalDto): Promise<Adicional> {
     const row = await this.prisma.adicional.create({
-      data,
+      data: {
+        valor: data.valor,
+        grupoId: +data.grupoId,
+        novedadReferenciaId: +data.novedadReferenciaId,
+      },
     });
 
     return row;
@@ -61,7 +65,11 @@ export class AdicionalService {
       where: {
         id,
       },
-      data,
+      data: {
+        valor: data.valor,
+        grupoId: +data.grupoId,
+        novedadReferenciaId: +data.novedadReferenciaId,
+      },
     });
   }
 }
