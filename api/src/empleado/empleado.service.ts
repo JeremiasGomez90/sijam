@@ -6,10 +6,12 @@ import { EmpleadoDto } from './dto';
 @Injectable()
 export class EmpleadoService {
   constructor(private prisma: PrismaService) {}
-  async create(dto: EmpleadoDto): Promise<Empleado> {
-    console.log({ dto });
+  async create(data: EmpleadoDto): Promise<Empleado> {
     const empleado = await this.prisma.empleado.create({
-      data: dto,
+      data: {
+        ...data,
+        grupoId: +data.grupoId,
+      },
     });
 
     return empleado;
@@ -62,7 +64,10 @@ export class EmpleadoService {
       where: {
         id,
       },
-      data,
+      data: {
+        ...data,
+        grupoId: +data.grupoId,
+      },
     });
   }
 }

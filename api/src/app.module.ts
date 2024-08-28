@@ -9,6 +9,8 @@ import { ReferenciaModule } from './referencia/referencia.module';
 import { ContratoModule } from './contrato/contrato.module';
 import { AdicionalModule } from './adicional/adicional.module';
 import { NovedadesReferenciasModule } from './novedadesReferencias/novedadesReferencias.module';
+import { FichadaModule } from './fichada/fichada.module';
+import { HorasModule } from './horas/horas.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { NovedadesReferenciasModule } from './novedadesReferencias/novedadesRefe
     ReferenciaModule,
     NovedadesReferenciasModule,
     AdicionalModule,
+    FichadaModule,
+    HorasModule,
   ],
 })
 export class AppModule {}

@@ -21,5 +21,5 @@ export class EmpleadoDto {
 
   @IsOptional()
   @IsString()
-  plantaId: number;
+  grupoId: string;
 }

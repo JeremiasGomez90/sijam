@@ -10,6 +10,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { createEmpleado } from "@/services/empleadoService";
+import { useEffect, useMemo, useState } from "react";
+import { getGrupos } from "@/services/grupoService";
+import { Grupo } from "@/models/grupo";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Inputs = {
   numero: string;
@@ -18,11 +22,14 @@ type Inputs = {
   apellido: string;
   telefono: string;
   direccion: string;
+  grupoId: string;
 }
 
 export default function NewEmpleado() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [grupos, setGrupos] = useState([]);
+
   const form = useForm({
     resolver: zodResolver(
       z.object({
@@ -31,7 +38,8 @@ export default function NewEmpleado() {
         nombre: z.string().min(1).max(50),
         apellido: z.string().min(1).max(50),
         telefono: z.string().min(1).max(50),
-        direccion: z.string().min(1).max(50),
+        direccion: z.string(),
+        grupoId: z.string(),
       }),
     ),
     defaultValues: {
@@ -41,9 +49,25 @@ export default function NewEmpleado() {
       apellido: '',
       telefono: '',
       direccion: '',
+      grupoId: '',
     }
   });
 
+  useEffect(() => {
+    getGrupos().then((res) => {
+      if (res?.data)
+        setGrupos(
+          res?.data.map((e: Grupo) => {
+            return {
+              ...e,
+              label: e.nombre,
+              value: e.id,
+            };
+          })
+        );
+    });
+  }, []);
+  
   const onSubmit: SubmitHandler<Inputs>  = async (data) => {
     try {
       await createEmpleado(data);
@@ -54,6 +78,47 @@ export default function NewEmpleado() {
     }
   }
   
+  const fields: {
+    label: string;
+    name: "numero" | "cuit" | "nombre" | "apellido" | "telefono" | "direccion" | "grupoId";
+    type?: string;
+    options?: { label: string; value: string }[];
+  }[] = useMemo(
+    () => [
+      {
+        label: "Numero Empleado",
+        name: "numero",      
+      },
+      {
+        label: "C.U.I.T",
+        name: "cuit",      
+      },
+      {
+        label: "Nombre",
+        name: "nombre",      
+      },
+      {
+        label: "Apellido",
+        name: "apellido",      
+      },
+      {
+        label: "Telefono",
+        name: "telefono",      
+      },
+      {
+        label: "Dirección",
+        name: "direccion",      
+      },
+      {
+        label: "Grupo",
+        name: "grupoId",
+        type: "select",
+        options: grupos,
+      }
+    ],
+    [grupos]
+  );
+
   return (
     <div className="h-full p-4">
       <div className="flex items-center gap-4 border-b mb-3 pb-3">
@@ -65,90 +130,75 @@ export default function NewEmpleado() {
       </div>
       <Form {...form}>
         <form className="flex flex-col gap-4 max-w-[500px]" onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="numero"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Numero Empleado</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Numero empleado" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="cuit"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>C.U.I.T</FormLabel>
-                  <FormControl>
-                    <Input placeholder="C.U.I.T" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="nombre"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nombre</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Nombre" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="apellido"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Apellido</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Apellido" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="telefono"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Telefono</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Telefono" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="space-y-2">
-            <FormField
-              control={form.control}
-              name="direccion"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Direccion</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Direccion" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
+        {fields.map((e) => {
+            if (e.type === "select") {
+              return (
+                <div key={e.name} className="space-y-2">
+                  <FormField
+                    control={form.control}
+                    name={e.name}
+                    render={({ field }) => {
+                      const value = e.options?.find(a => field.value && +a.value === +field.value);
+
+                      return (
+                        <FormItem>
+                          <FormLabel>{e.label}</FormLabel>
+                          <FormControl>
+                            <Select
+                              value={field.value}
+                              onValueChange={field.onChange}
+                              name={field.name}
+                              required
+                            >
+                              <SelectTrigger>
+                                <SelectValue
+                                  onBlur={field.onBlur}
+                                  ref={field.ref}
+                                >
+                                   {value?.label || field.value}
+                                </SelectValue>
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  {e.options?.map((o, i) => {
+                                    return (
+                                      <SelectItem
+                                        key={`${e.name}-option-${i}`}
+                                        value={o.value}
+                                      >
+                                        {o.label}
+                                      </SelectItem>
+                                    );
+                                  })}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
+              );
+            } else {
+              return (
+                <div key={e.name} className="space-y-2">
+                  <FormField
+                    control={form.control}
+                    name={e.name}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{e.label}</FormLabel>
+                        <FormControl>
+                          <Input placeholder={e.label} type={e.type} {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              );
+            }
+          })}
           <Button variant="default" className="w-full" type="submit" disabled={Object.entries(form.formState.errors).length > 0}>
             <span className="text-sm font-semibold">Guardar</span>
           </Button>

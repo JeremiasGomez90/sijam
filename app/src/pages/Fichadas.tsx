@@ -1,5 +1,5 @@
 import { ChevronLeft } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,36 +15,47 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useEffect, useMemo, useState } from "react";
-import { Empleado } from "@/models/empleado";
-import { getEmpleado, updateEmpleado } from "@/services/empleadoService";
-import { confirmAlert } from "@/utils/alerts";
-import { getGrupos } from "@/services/grupoService";
-import { Grupo } from "@/models/grupo";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { getPlantas } from "@/services/plantaService";
+import { Planta } from "@/models/planta";
+import { uploadFichada } from "@/services/fichadaService";
 
 type Inputs = {
-  numero: string;
-  cuit: string;
-  nombre: string;
-  apellido: string;
-  telefono: string;
-  direccion: string;
-  grupoId: string;
+  plantaId: string;
+  excel: string;
 };
 
-export default function EditEmpleado() {
+export default function Fichadas() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const params = useParams();
-  const [values, setValues] = useState<Empleado>();
-  const [grupos, setGrupos] = useState([]);
+  const form = useForm({
+    resolver: zodResolver(
+      z.object({
+        plantaId: z.string(),
+        excel: z.string(),
+      })
+    ),
+    defaultValues: {
+      plantaId: "",
+      excel: "",
+    },
+  });
+  const [plantas, setPlantas] = useState([]);
+  const [file, setFile] = useState<File>();
 
   useEffect(() => {
-    getGrupos().then((res) => {
+    getPlantas().then((res) => {
       if (res?.data)
-        setGrupos(
-          res?.data.map((e: Grupo) => {
+        setPlantas(
+          res?.data.map((e: Planta) => {
             return {
               ...e,
               label: e.nombre,
@@ -52,152 +63,102 @@ export default function EditEmpleado() {
             };
           })
         );
-
-        if (params?.id) {
-          getEmpleado(params?.id).then((res) => {
-            if (res?.data) {
-              setValues(res.data);
-            }
-          });
-        }
     });
-  }, [params.id]);
-
-  const form = useForm({
-    resolver: zodResolver(
-      z.object({
-        numero: z
-          .string()
-          .min(1, { message: "aca podes poner algun mensaje de error" })
-          .max(50),
-        cuit: z.string().min(1).max(11),
-        nombre: z.string().min(1).max(50),
-        apellido: z.string().min(1).max(50),
-        telefono: z.string().min(1).max(50),
-        direccion: z.string(),
-        grupoId: z.string(),
-      })
-    ),
-    defaultValues: {
-      numero: '',
-      cuit: '',
-      nombre: '',
-      apellido: '',
-      telefono: '',
-      direccion: '',
-      grupoId: '',
-    },
-    values: useMemo(() => {
-      return values;
-    }, [values]),
-  });
+  }, []);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      const alert = await confirmAlert({
-        title: "Guardar cambios?",
-      });
-
-      if (alert.isConfirmed) {
-        if (values) {
-          await updateEmpleado({
-            id: values.id,
-            ...data,
-          });
-
-          toast({ description: "Empleado modificado correctamente" });
-          navigate("/empleados");
-        }
+      const formData = new FormData();
+      for(const prop in data){
+        formData.append(prop, data[prop as keyof Inputs]);
       }
+
+      if(file){
+        formData.append("file", file)
+      }
+      await uploadFichada(formData);
+
+      // toast({ description: "Fichada creada correctamente" });
+      // navigate("/fichadas");
     } catch (error) {
       toast({
-        description: "Hubo un error al modificar el empleado",
+        description: "Hubo un error al crear el fichada",
         variant: "destructive",
       });
     }
   };
-  
+
   const fields: {
     label: string;
-    name: "numero" | "cuit" | "nombre" | "apellido" | "telefono" | "direccion" | "grupoId";
+    name: "plantaId" | "excel";
     type?: string;
     options?: { label: string; value: string }[];
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   }[] = useMemo(
     () => [
       {
-        label: "Numero Empleado",
-        name: "numero",      
-      },
-      {
-        label: "C.U.I.T",
-        name: "cuit",      
-      },
-      {
-        label: "Nombre",
-        name: "nombre",      
-      },
-      {
-        label: "Apellido",
-        name: "apellido",      
-      },
-      {
-        label: "Telefono",
-        name: "telefono",      
-      },
-      {
-        label: "Dirección",
-        name: "direccion",      
-      },
-      {
-        label: "Grupo",
-        name: "grupoId",
+        label: "Planta",
+        name: "plantaId",
         type: "select",
-        options: grupos,
-      }
+        options: plantas,
+      },
+      {
+        label: "Cargar Excel",
+        name: "excel",
+        type: "file",
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+          if (e?.target?.files?.length) {
+            setFile(e?.target?.files[0]);
+          } else {
+            setFile(undefined);
+          }
+        },
+      },
     ],
-    [grupos]
+    [plantas]
   );
 
   return (
     <div className="h-full p-4">
       <div className="flex items-center gap-4 border-b mb-3 pb-3">
-        <Button variant="outline" onClick={() => navigate("/empleados")}>
+        <Button variant="outline" onClick={() => navigate("/fichadas")}>
           <ChevronLeft className="h-6 w-6" />
           <span className="text-sm font-semibold">Volver</span>
         </Button>
-        <h1 className="text-xl font-bold">Agregar Nuevo Empleado</h1>
+        <h1 className="text-xl font-bold">Fichadas</h1>
       </div>
       <Form {...form}>
         <form
           className="flex flex-col gap-4 max-w-[500px]"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-        {fields.map((e) => {
+          {fields.map((e) => {
             if (e.type === "select") {
               return (
                 <div key={e.name} className="space-y-2">
                   <FormField
                     control={form.control}
                     name={e.name}
+                    rules={{ required: true }}
                     render={({ field }) => {
-                      const value = e.options?.find(a => field.value && +a.value === +field.value);
+                      const value = e.options?.find(
+                        (a) => +a.value === +field.value
+                      );
 
                       return (
                         <FormItem>
                           <FormLabel>{e.label}</FormLabel>
                           <FormControl>
                             <Select
-                              value={field.value}
                               onValueChange={field.onChange}
                               name={field.name}
-                              required
                             >
                               <SelectTrigger>
                                 <SelectValue
                                   onBlur={field.onBlur}
                                   ref={field.ref}
                                 >
-                                   {value?.label || field.value}
+                                  {value?.label || field.value}
                                 </SelectValue>
                               </SelectTrigger>
                               <SelectContent>
@@ -228,11 +189,22 @@ export default function EditEmpleado() {
                   <FormField
                     control={form.control}
                     name={e.name}
+                    rules={{ required: true }}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>{e.label}</FormLabel>
                         <FormControl>
-                          <Input placeholder={e.label} type={e.type} {...field} />
+                          <Input
+                            {...field}
+                            type={e.type}
+                            placeholder={e.label}
+                            onChange={(event) => {
+                              field.onChange(event);
+                              if (e.onChange) {
+                                e.onChange(event);
+                              }
+                            }}
+                          />
                         </FormControl>
                       </FormItem>
                     )}
@@ -241,6 +213,7 @@ export default function EditEmpleado() {
               );
             }
           })}
+
           <Button
             variant="default"
             className="w-full"

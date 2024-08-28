@@ -27,6 +27,7 @@ import EditReferencia from "@/pages/EditReferencia";
 import Adicionales from "@/pages/Adicionales";
 import NewAdicional from "@/pages/NewAdicional";
 import EditAdicional from "@/pages/EditAdicional";
+import Fichadas from "@/pages/Fichadas";
 
 export const router = createBrowserRouter([
   {
@@ -232,6 +233,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Settings />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "fichadas",
+        element: (
+          <ProtectedRoute>
+            <Fichadas />
           </ProtectedRoute>
         ),
       },

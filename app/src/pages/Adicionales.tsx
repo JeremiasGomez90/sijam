@@ -73,10 +73,9 @@ export default function Adicionales() {
       <Table >
         <TableHeader>
           <TableRow>
-            <TableHead>Numero</TableHead>
-            <TableHead>Nombre</TableHead>
-            <TableHead>Apellido</TableHead>
-            <TableHead>CUIT</TableHead>
+            <TableHead>Valor</TableHead>
+            <TableHead>Grupo</TableHead>
+            <TableHead>Novedad - Referencia</TableHead>
             <TableHead className="text-right pr-[40px]">Acciones</TableHead>
           </TableRow>
         </TableHeader>

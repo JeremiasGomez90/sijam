@@ -79,7 +79,7 @@ export default function Contratos() {
         <TableHeader>
           <TableRow>
             <TableHead>Nombre</TableHead>
-            <TableHead>Contrato</TableHead>
+            <TableHead>Planta</TableHead>
             <TableHead className="text-right pr-[40px]">Acciones</TableHead>
           </TableRow>
         </TableHeader>

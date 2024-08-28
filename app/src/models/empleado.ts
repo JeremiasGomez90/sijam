@@ -6,4 +6,5 @@ export type Empleado = {
   apellido: string;
   telefono: string;
   direccion: string;
+  grupoId: string;
 };

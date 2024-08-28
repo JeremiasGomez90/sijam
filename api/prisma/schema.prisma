@@ -33,7 +33,9 @@ model Empleado {
   cuit String?
   telefono String?
   direccion String?
-  horas Hora[]
+  grupoId Int?
+  grupo       Grupo?    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  Horas Horas[]
   baja Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -68,16 +70,19 @@ model Grupo {
   contrato Contrato? @relation(fields: [contratoId], references: [id])
   baja Boolean @default(false)
   adicionales  Adicional[]
+  empleados  Empleado[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Hora {
+model Horas {
   id Int @id @default(autoincrement())
-  cantidad Float
+  cantidad Decimal @db.Decimal(9,2)
   fecha DateTime
   empleadoId Int
   empleado Empleado @relation(fields: [empleadoId], references: [id])
+  adicionalId Int
+  adicional Adicional @relation(fields: [adicionalId], references: [id])
   baja Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -116,11 +121,12 @@ model NovedadesReferencias {
 
 model Adicional {
   id            Int                   @id @default(autoincrement())
-  valor        String                @unique
+  valor  Decimal @db.Decimal(9,2)
   grupoId Int
-  novedadReferenciaId Int
   grupo       Grupo    @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  novedadReferenciaId Int
   novedadesReferencias    NovedadesReferencias @relation(fields: [novedadReferenciaId], references: [id], onDelete: Cascade)
+  Horas  Horas[]
   baja Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

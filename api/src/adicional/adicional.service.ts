@@ -5,7 +5,7 @@ import { AdicionalDto } from './dto';
 
 @Injectable()
 export class AdicionalService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
   async create(data: AdicionalDto): Promise<Adicional> {
     const row = await this.prisma.adicional.create({
       data: {

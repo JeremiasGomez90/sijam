@@ -77,6 +77,7 @@ export default function Empleados() {
             <TableHead>Nombre</TableHead>
             <TableHead>Apellido</TableHead>
             <TableHead>CUIT</TableHead>
+            <TableHead>Grupo</TableHead>
             <TableHead className="text-right pr-[40px]">Acciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -87,6 +88,7 @@ export default function Empleados() {
               <TableCell className="py-2">{emp.nombre}</TableCell>
               <TableCell className="py-2">{emp.apellido}</TableCell>
               <TableCell className="py-2">{emp.cuit}</TableCell>
+              <TableCell className="py-2">{emp.grupoId}</TableCell>
               <TableCell className="flex gap-2 py-2 justify-end">
                 <TooltipProvider delayDuration={0}>
                   <Tooltip disableHoverableContent>
