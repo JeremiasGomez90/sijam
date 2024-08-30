@@ -78,7 +78,7 @@ model Grupo {
 model Horas {
   id Int @id @default(autoincrement())
   cantidad Decimal @db.Decimal(9,2)
-  fecha DateTime
+  fecha DateTime @db.Date
   empleadoId Int
   empleado Empleado @relation(fields: [empleadoId], references: [id])
   adicionalId Int

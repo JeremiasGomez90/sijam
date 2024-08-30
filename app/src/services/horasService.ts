@@ -1,12 +1,15 @@
 import axios from "@/api/axios";
 import { handleError } from "../helpers/ErrorHandler";
 
-const api = "/fichada";
+const api = "/horas";
 
-export const uploadFichada = async (data: FormData) => {
+export const buscarHoras = async (data: {
+  fecha?: string;
+  empleadoId?: number | string;
+  ids?: number[];
+}) => {
   try {
     const res = await axios.post(api, data);
-
     return res.data;
   } catch (error) {
     handleError(error);

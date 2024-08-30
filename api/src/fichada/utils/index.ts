@@ -27,3 +27,25 @@ export const calcularHoras = (fechaInicial, fechaFinal) => {
     ? `${diferenciaEnHoras}.${diferenciaEnMinutos}`
     : '';
 };
+
+export const multiplicarHoras = (horario, valor) => {
+  if (horario && valor) {
+    const valores_horario = horario ? horario?.split('.') : null;
+
+    const hora_milisegundos = Math.floor(valores_horario[0] * (1000 * 60 * 60));
+    const minutos_milisegundos = Math.floor(valores_horario[1] * (1000 * 60));
+
+    const ms = (hora_milisegundos + minutos_milisegundos) * +valor;
+
+    const segundos = Math.floor(ms / 1000);
+    const minutos = Math.floor(segundos / 60);
+    const horas = Math.floor(minutos / 60);
+
+    const minutosRestantes = minutos % 60;
+    // const segundosRestantes = segundos % 60;
+
+    return `${horas.toString().padStart(2, '0')}.${minutosRestantes.toString().padStart(2, '0')}`;
+  } else {
+    return '0';
+  }
+};
